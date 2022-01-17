@@ -1,38 +1,35 @@
+<?php require 'header.php';
 
-
-
-<?php
-
-
-
-if (isset ($_POST['reference']) && isset($_POST['article'])&& isset($_POST['descr'])&& isset($_POST['prix_achat_unitaire'])&& isset($_POST['prix_vente_unitaire'])&& isset($_POST['quantite_stock'])&& isset($_POST['e_liquide_quantité']))
+        
+//je chope les variable de mes inputs.
+if (isset ($_POST['reference']))
 {
+    //j'initialise les variables
     $reference = $_POST['reference'];
     $article = $_POST['article'];
-   $descr= $_POST['descr'];
-   $pa= $_POST['prix_achat_unitaire'];
+    $descr= $_POST['descr'];
+    $pa= $_POST['prix_achat_unitaire'];
     $pv = $_POST['prix_vente_unitaire'];
     $qs = $_POST['quantite_stock'];
-    $qe = $_POST['e_liquide_quantité'];
-    $qs = $_POST['quantite_stock'];
-    $message = '';
-    
-    $sql = 'INSERT INTO  vapoteuse(reference,article,descr,prix_achat_unitaire,prix_vente_unitaire,e_liquide_quantité);
-    VALUES(:reference,:article,:descr,:prix_achat_unitaire,:prix_vente_unitaire,:e_liquide_quantité)';
+    $qe = $_POST['e_liquide_quantite'];
+//je les insèrent dans mon mysql
+    $sql = 'INSERT INTO  vapoteuse(reference,article,descr,prix_achat_unitaire,prix_vente_unitaire,quantite_stock,e_liquide_quantite) VALUES(:reference,:article,:descr,:prix_achat_unitaire,:prix_vente_unitaire,:quantite_stock,:e_liquide_quantite)';
 
-    $statements = $connection->prepare($sql);
+    $statement = $connection->prepare($sql);
 
-   if ($statements->execute([':reference'=>$reference, ':article'=>$article,':descr'=>$descr,':prix_achat_unitaire'=>$pa,':prix_vente_unitaire'=>$pv,':quantite_stock'=>$qs, ':e_liquide_quantité'=>$qe]))
+    if ($statement->execute(['reference'=> $reference, 'article'=> $article,'descr'=> $descr,'prix_achat_unitaire'=> $pa,'prix_vente_unitaire'=> $pv,'quantite_stock'=> $qs, 'e_liquide_quantite'=> $qe]))
     {
        $message = 'les enregistrements sont bons';
+       header("location:index.php");
     }
+   }
 
 
-}
+
 
 ?>
 
-<?php require 'header.php'; ?>
+
 
 <div class="container">
 
@@ -40,22 +37,23 @@ if (isset ($_POST['reference']) && isset($_POST['article'])&& isset($_POST['desc
 
 <div class="card-header">
 
-<h2>VAPFACTORY</h2>
+<h2>VAPFACTORY AJOUT</h2>
 
 </div>
 
 <div class="card-body">
 
 <?php if(!empty($message)): ?>
-    <div class="alert alert-succès">
-<?=$message;?>
+    <div class="alert alert-success">
+<?=$message; ?>
 </div>
 <?php endif;?>
-<form method='post'>
+
+<form action="" method="post">
 
 <div class="form-group">
 
-<label for="">référence</label>
+<label for="reference">référence</label>
 <input type="text" name="reference" id="reference" class="form-control">
 
 </div>
@@ -67,30 +65,30 @@ if (isset ($_POST['reference']) && isset($_POST['article'])&& isset($_POST['desc
 </div>
 <div class="form-group">
 
-<label for="description">description</label>
-<input type="text" name="description" id="description" class="form-control">
+<label for="descr">description</label>
+<input type="text" name="descr" id="descr" class="form-control">
 
 </div>
 <div class="form-group">
 
 <label for="prix d'achat unitaire">prix d'achat unitaire</label>
-<input type="number" name="prix d'achat uniaire" id="prix d'achat unitaire" class="form-control">
+<input type="number" name="prix_achat_unitaire" id="prix d'achat unitaire" class="form-control">
 
 </div>
 <div class="form-group">
 
 <label for="prix vente unitaire">prix de vente unitaire</label>
-<input type="number" name="prix d'achat unitaire" id="prix d'achat unitaire" class="form-control">
+<input type="number" name="prix_vente_unitaire" id="prix vente unitaire" class="form-control">
 
 </div>
 <div class="form-group">
 
 <label for="quantite de stock"> quantité de stock </label>
-<input type="number" name="quantite de stock" id="quantité de stock" class="form-control">
+<input type="number" name="quantite_stock" id="quantite_stock" class="form-control">
 
 </div>
-<label for="quantite de e-liquide"> quantité e-liquide de stock </label>
-<input type="number" name="quantite de e-liquide" id="quantité de e-liquide" class="form-control">
+<label for="e_liquide_quantite"> quantité e-liquide de stock </label>
+<input type="number" name="e_liquide_quantite" id="e_liquide_quantite" class="form-control">
 <div class="form-group">
 
 <button  type="submit" class="btn btn-info">AJOUTER</button>
